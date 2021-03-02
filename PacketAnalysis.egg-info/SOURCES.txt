@@ -1,0 +1,14 @@
+LICENSE.txt
+MANIFEST.in
+README.md
+setup.py
+PacketAnalysis/PacketPrinter.py
+PacketAnalysis/Sniffer.py
+PacketAnalysis/__init__.py
+PacketAnalysis/__main__.py
+PacketAnalysis.egg-info/PKG-INFO
+PacketAnalysis.egg-info/SOURCES.txt
+PacketAnalysis.egg-info/dependency_links.txt
+PacketAnalysis.egg-info/entry_points.txt
+PacketAnalysis.egg-info/requires.txt
+PacketAnalysis.egg-info/top_level.txt

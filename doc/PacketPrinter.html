@@ -1,0 +1,78 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><title>Python: module PacketPrinter</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+</head><body bgcolor="#f0f0f8">
+
+<table summary="heading" width="100%" cellspacing="0" cellpadding="2" border="0">
+<tbody><tr bgcolor="#7799ee">
+<td valign="bottom">&nbsp;<br>
+<font face="helvetica, arial" color="#ffffff">&nbsp;<br><big><big><strong>PacketPrinter</strong></big></big></font></td><td valign="bottom" align="right"><font face="helvetica, arial" color="#ffffff"><a href="http://192.168.0.29:8000/doc/">index</a><br><a href="http://192.168.0.29:8000/doc/packetprinter.py">packetprinter.py</a></font></td></tr></tbody></table>
+    <p><tt>This&nbsp;file&nbsp;implement&nbsp;<a href="#PacketPrinter">PacketPrinter</a>&nbsp;class.</tt></p>
+<p>
+<table summary="section" width="100%" cellspacing="0" cellpadding="2" border="0">
+<tbody><tr bgcolor="#aa55cc">
+<td colspan="3" valign="bottom">&nbsp;<br>
+<font face="helvetica, arial" color="#ffffff"><big><strong>Modules</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#aa55cc"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><table summary="list" width="100%"><tbody><tr><td width="25%" valign="top"><a href="http://192.168.0.29:8000/doc/scapy.packet.html">scapy.packet</a><br>
+</td><td width="25%" valign="top"></td><td width="25%" valign="top"></td><td width="25%" valign="top"></td></tr></tbody></table></td></tr></tbody></table></p><p>
+<table summary="section" width="100%" cellspacing="0" cellpadding="2" border="0">
+<tbody><tr bgcolor="#ee77aa">
+<td colspan="3" valign="bottom">&nbsp;<br>
+<font face="helvetica, arial" color="#ffffff"><big><strong>Classes</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#ee77aa"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><dl>
+<dt><font face="helvetica, arial"><a href="http://192.168.0.29:8000/doc/builtins.html#object">builtins.object</a>
+</font></dt><dd>
+<dl>
+<dt><font face="helvetica, arial"><a href="http://192.168.0.29:8000/doc/PacketPrinter.html#PacketPrinter">PacketPrinter</a>
+</font></dt></dl>
+</dd>
+</dl>
+ <p>
+<table summary="section" width="100%" cellspacing="0" cellpadding="2" border="0">
+<tbody><tr bgcolor="#ffc8d8">
+<td colspan="3" valign="bottom">&nbsp;<br>
+<font face="helvetica, arial" color="#000000"><a name="PacketPrinter">class <strong>PacketPrinter</strong></a>(<a href="http://192.168.0.29:8000/doc/builtins.html#object">builtins.object</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan="2"><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan="2"><tt><a href="#PacketPrinter">PacketPrinter</a>(hexa:&nbsp;bool&nbsp;=&nbsp;True,&nbsp;summary:&nbsp;bool&nbsp;=&nbsp;False,&nbsp;details1:&nbsp;bool&nbsp;=&nbsp;False,&nbsp;details2:&nbsp;bool&nbsp;=&nbsp;False,&nbsp;python:&nbsp;bool&nbsp;=&nbsp;False,&nbsp;raw_:&nbsp;bool&nbsp;=&nbsp;False,&nbsp;info:&nbsp;bool&nbsp;=&nbsp;False)<br>
+&nbsp;<br>
+This&nbsp;class&nbsp;print&nbsp;packet&nbsp;with&nbsp;differents&nbsp;formats.<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%">Methods defined here:<br>
+<dl><dt><a name="PacketPrinter-__init__"><strong>__init__</strong></a>(self,
+ hexa: bool = True, summary: bool = False, details1: bool = False, 
+details2: bool = False, python: bool = False, raw_: bool = False, info: 
+bool = False)</dt><dd><tt>Initialize&nbsp;self.&nbsp;&nbsp;See&nbsp;help(type(self))&nbsp;for&nbsp;accurate&nbsp;signature.</tt></dd></dl>
+
+<dl><dt><a name="PacketPrinter-print"><strong>print</strong></a>(self, packet: scapy.packet.Packet) -&gt; None</dt><dd><tt>This&nbsp;function&nbsp;call&nbsp;all&nbsp;printer&nbsp;for&nbsp;one&nbsp;packet.</tt></dd></dl>
+
+<dl><dt><a name="PacketPrinter-print_command"><strong>print_command</strong></a>(self, packet: scapy.packet.Packet) -&gt; None</dt><dd><tt>This&nbsp;function&nbsp;print&nbsp;the&nbsp;command&nbsp;to&nbsp;build<br>
+the&nbsp;packet&nbsp;with&nbsp;scapy.</tt></dd></dl>
+
+<dl><dt><a name="PacketPrinter-print_raw"><strong>print_raw</strong></a>(self, packet: scapy.packet.Packet) -&gt; None</dt><dd><tt>This&nbsp;function&nbsp;print&nbsp;packet&nbsp;raw&nbsp;(as&nbsp;python<br>
+bytes&nbsp;<a href="http://192.168.0.29:8000/doc/builtins.html#object">object</a>).</tt></dd></dl>
+
+<dl><dt><a name="PacketPrinter-print_summary"><strong>print_summary</strong></a>(self, packet: scapy.packet.Packet) -&gt; None</dt><dd><tt>This&nbsp;function&nbsp;print&nbsp;the&nbsp;packet&nbsp;summary&nbsp;(proto,<br>
+IP&nbsp;source,&nbsp;IP&nbsp;destination).</tt></dd></dl>
+
+<hr>
+Data descriptors defined here:<br>
+<dl><dt><strong>__dict__</strong></dt>
+<dd><tt>dictionary&nbsp;for&nbsp;instance&nbsp;variables&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+<dl><dt><strong>__weakref__</strong></dt>
+<dd><tt>list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+</td></tr></tbody></table></p></td></tr></tbody></table></p><p>
+<table summary="section" width="100%" cellspacing="0" cellpadding="2" border="0">
+<tbody><tr bgcolor="#55aa55">
+<td colspan="3" valign="bottom">&nbsp;<br>
+<font face="helvetica, arial" color="#ffffff"><big><strong>Data</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#55aa55"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><strong>__all__</strong> = ['PacketPrinter']</td></tr></tbody></table>
+</p></body></html>
