@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-""" This package implement Packet Analysis with
-network sniffer or pcap file reader. """
+"""
+This package prints and sniffs the packets.
+"""
 
 ###################
-#    This package implement Packet Analysis with network sniffer or pcap file reader.
+#    This package prints and sniffs the packets.
 #    Copyright (C) 2021  Maurice Lambert
 
 #    This program is free software: you can redistribute it and/or modify
@@ -22,19 +23,33 @@ network sniffer or pcap file reader. """
 #    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 ###################
 
-try:
-    from .Sniffer import main
-except ImportError:
-    from Sniffer import main
+__version__ = "1.0.0"
+__author__ = "Maurice Lambert"
+__author_email__ = "mauricelambert434@gmail.com"
+__maintainer__ = "Maurice Lambert"
+__maintainer_email__ = "mauricelambert434@gmail.com"
+__description__ = """
+This file implements a network sniffer.
+"""
+license = "GPL-3.0 License"
+__url__ = "https://github.com/mauricelambert/PacketAnalysis"
 
-print(
-    """
-PacketsAnalysis  Copyright (C) 2021  Maurice Lambert
+copyright = """
+PacketAnalysis  Copyright (C) 2021  Maurice Lambert
 This program comes with ABSOLUTELY NO WARRANTY.
 This is free software, and you are welcome to redistribute it
 under certain conditions.
 """
-)
+__license__ = license
+__copyright__ = copyright
+
+try:
+    from .Sniffer import main
+except ImportError:
+    from Sniffer import main
+import sys
+
+print(copyright)
 
 main()
-exit(0)
+sys.exit(0)

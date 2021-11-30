@@ -1,36 +1,46 @@
-from setuptools import setup, find_packages
+from setuptools import setup
 
 setup(
-    name = 'PacketAnalysis',
- 
-    version = "0.0.1",
-    packages = find_packages(include=["PacketAnalysis"]),
-    install_requires = ['scapy'],
-
-    author = "Maurice Lambert", 
-    author_email = "mauricelambert434@gmail.com",
- 
-    description = "This package implement Packet Analysis with network sniffer or pcap file reader.",
-    long_description = open('README.md').read(),
+    name='PacketAnalysis',
+    version="1.0.0",
+    packages=['PacketAnalysis'],
+    install_requires=['scapy'],
+    author="Maurice Lambert",
+    author_email="mauricelambert434@gmail.com",
+    maintainer="Maurice Lambert",
+    maintainer_email="mauricelambert434@gmail.com",
+    description="This package prints and sniffs the packets.",
+    long_description=open("README.md").read(),
     long_description_content_type="text/markdown",
- 
-    include_package_data = True,
-
-    url = 'https://github.com/mauricelambert/PacketAnalysis',
- 
+    url="https://github.com/mauricelambert/PacketAnalysis",
+    project_urls = {
+        "Sniffer doc": "https://mauricelambert.github.io/info/python/security/Sniffer.html",
+        "PacketPrinter doc": "https://mauricelambert.github.io/info/python/security/PacketPrinter.html",
+        "Executable": "https://mauricelambert.github.io/info/python/security/PacketPrinter.pyz",
+    },
     classifiers = [
         "Programming Language :: Python",
         "Development Status :: 5 - Production/Stable",
-        "Environment :: Console",
+        "Topic :: System :: Networking",
+        "Topic :: Security",
         "Natural Language :: English",
-        "Operating System :: OS Independent",
-        "Programming Language :: Python :: 3.8"
+        "Programming Language :: Python :: 3.9",
+        "Operating System :: POSIX :: Linux",
+        "Operating System :: Microsoft :: Windows",
+        "Operating System :: MacOS",
     ],
- 
+    python_requires='>=3.6',
     entry_points = {
         'console_scripts': [
             'PacketAnalysis = PacketAnalysis:packets_analysis'
         ],
     },
-    python_requires='>=3.6',
+    keywords=[
+        "traffic",
+        "network",
+        "packet",
+        "analysis",
+    ],
+    platforms=["Windows", "Linux", "MacOS"],
+    license="GPL-3.0 License",
 )

@@ -1,10 +1,12 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-""" This file implement PacketPrinter class. """
+"""
+This file implements a "packet printer" (a tool to print packet).
+"""
 
 ###################
-#    This file implement PacketPrinter class.
+#    This file implements a "packet printer".
 #    Copyright (C) 2021  Maurice Lambert
 
 #    This program is free software: you can redistribute it and/or modify
@@ -21,14 +23,36 @@
 #    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 ###################
 
-from scapy.all import hexdump, raw, ls, packet
+__version__ = "1.0.0"
+__author__ = "Maurice Lambert"
+__author_email__ = "mauricelambert434@gmail.com"
+__maintainer__ = "Maurice Lambert"
+__maintainer_email__ = "mauricelambert434@gmail.com"
+__description__ = """
+This file implements a network sniffer.
+"""
+license = "GPL-3.0 License"
+__url__ = "https://github.com/mauricelambert/PacketAnalysis"
+
+copyright = """
+PacketAnalysis  Copyright (C) 2021  Maurice Lambert
+This program comes with ABSOLUTELY NO WARRANTY.
+This is free software, and you are welcome to redistribute it
+under certain conditions.
+"""
+__license__ = license
+__copyright__ = copyright
 
 __all__ = ["PacketPrinter"]
+
+from scapy.all import hexdump, raw, ls, packet
 
 
 class PacketPrinter:
 
-    """ This class print packet with differents formats. """
+    """
+    This class prints packets in different formats.
+    """
 
     def __init__(
         self,
@@ -59,28 +83,34 @@ class PacketPrinter:
 
     def print_command(self, packet: packet.Packet) -> None:
 
-        """This function print the command to build
-        the packet with scapy."""
+        """
+        This function prints the command to build the packet with scapy.
+        """
 
         print(packet.command())
 
     def print_summary(self, packet: packet.Packet) -> None:
 
-        """This function print the packet summary (proto,
-        IP source, IP destination)."""
+        """
+        This function prints the summary of the packet
+        (protocol, source IP, destination IP).
+        """
 
         print(packet.summary())
 
     def print_raw(self, packet: packet.Packet) -> None:
 
-        """This function print packet raw (as python
-        bytes object)."""
+        """
+        This function prints the raw packet.
+        """
 
         print(raw(packet))
 
     def print(self, packet: packet.Packet) -> None:
 
-        """ This function call all printer for one packet. """
+        """
+        This function calls generic packet printing functions.
+        """
 
         for function in self.functions:
             function(packet)
