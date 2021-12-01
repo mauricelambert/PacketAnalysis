@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name='PacketAnalysis',
-    version="1.0.0",
+    version="1.0.1",
     packages=['PacketAnalysis'],
     install_requires=['scapy'],
     author="Maurice Lambert",
@@ -14,8 +14,8 @@ setup(
     long_description_content_type="text/markdown",
     url="https://github.com/mauricelambert/PacketAnalysis",
     project_urls = {
-        "Sniffer doc": "https://mauricelambert.github.io/info/python/security/Sniffer.html",
-        "PacketPrinter doc": "https://mauricelambert.github.io/info/python/security/PacketPrinter.html",
+        "Sniffer doc": "https://mauricelambert.github.io/info/python/security/PacketAnalysis/Sniffer.html",
+        "PacketPrinter doc": "https://mauricelambert.github.io/info/python/security/PacketAnalysis/PacketPrinter.html",
         "Executable": "https://mauricelambert.github.io/info/python/security/PacketPrinter.pyz",
     },
     classifiers = [

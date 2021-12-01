@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
 Name: PacketAnalysis
-Version: 1.0.0
+Version: 1.0.1
 Summary: This package prints and sniffs the packets.
 Home-page: https://github.com/mauricelambert/PacketAnalysis
 Author: Maurice Lambert
@@ -8,8 +8,8 @@ Author-email: mauricelambert434@gmail.com
 Maintainer: Maurice Lambert
 Maintainer-email: mauricelambert434@gmail.com
 License: GPL-3.0 License
-Project-URL: Sniffer doc, https://mauricelambert.github.io/info/python/security/Sniffer.html
-Project-URL: PacketPrinter doc, https://mauricelambert.github.io/info/python/security/PacketPrinter.html
+Project-URL: Sniffer doc, https://mauricelambert.github.io/info/python/security/PacketAnalysis/Sniffer.html
+Project-URL: PacketPrinter doc, https://mauricelambert.github.io/info/python/security/PacketAnalysis/PacketPrinter.html
 Project-URL: Executable, https://mauricelambert.github.io/info/python/security/PacketPrinter.pyz
 Keywords: traffic,network,packet,analysis
 Platform: Windows
@@ -28,7 +28,7 @@ Requires-Python: >=3.6
 Description-Content-Type: text/markdown
 License-File: LICENSE.txt
 
-![PacketAnalysis logo](https://mauricelambert.github.io/info/python/security/PacketAnalysis_small.png "PacketAnalysis logo")
+![PacketAnalysis logo](https://mauricelambert.github.io/info/python/security/PacketAnalysis/logo_small.png "PacketAnalysis logo")
 
 # PacketAnalysis
 
@@ -82,7 +82,7 @@ sniffer = Sniffer(PacketPrinter(), filetoread="capture.pcap")
  - [Pypi](https://pypi.org/project/PacketAnalysis/)
  - [Documentation PacketPrinter](https://mauricelambert.github.io/info/python/security/PacketAnalysis/PacketPrinter.html)
  - [Documentation Sniffer](https://mauricelambert.github.io/info/python/security/PacketAnalysis/Sniffer.html)
- - [Download as python executable](https://mauricelambert.github.io/info/python/security/PacketAnalysis.pyz)
+ - [Download as python executable](https://mauricelambert.github.io/info/python/security/PacketAnalysis/PacketAnalysis.pyz)
 
 ## Help
 

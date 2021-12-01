@@ -1,4 +1,4 @@
-![PacketAnalysis logo](https://mauricelambert.github.io/info/python/security/PacketAnalysis_small.png "PacketAnalysis logo")
+![PacketAnalysis logo](https://mauricelambert.github.io/info/python/security/PacketAnalysis/logo_small.png "PacketAnalysis logo")
 
 # PacketAnalysis
 
@@ -52,7 +52,7 @@ sniffer = Sniffer(PacketPrinter(), filetoread="capture.pcap")
  - [Pypi](https://pypi.org/project/PacketAnalysis/)
  - [Documentation PacketPrinter](https://mauricelambert.github.io/info/python/security/PacketAnalysis/PacketPrinter.html)
  - [Documentation Sniffer](https://mauricelambert.github.io/info/python/security/PacketAnalysis/Sniffer.html)
- - [Download as python executable](https://mauricelambert.github.io/info/python/security/PacketAnalysis.pyz)
+ - [Download as python executable](https://mauricelambert.github.io/info/python/security/PacketAnalysis/PacketAnalysis.pyz)
 
 ## Help
 

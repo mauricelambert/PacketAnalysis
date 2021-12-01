@@ -29,28 +29,27 @@ This file implements a network sniffer.
 >>> sniffer = Sniffer(PacketPrinter(), filetoread="capture.pcap")
 
 ~# python3 Sniffer.py
-[22/06/2022 02:53:11 AM] WARNING  Start the network sniffer on WIFI (IP: 172.16.10.55, MAC: ee:80:3d:0a:f9:2f).
+[22/06/2022 02:53:11] WARNING  (30) {__main__ - Sniffer.py:302} Start the network sniffer on WIFI (IP: 172.16.10.55, MAC: ee:80:3d:0a:f9:2f).
 <packets ...>
-[22/06/2022 02:53:11 AM] CRITICAL Network traffic analysis is stopped.
+[22/06/2022 02:53:11] CRITICAL (50) {__main__ - Sniffer.py:312} Network traffic analysis is stopped.
 ~# python3 Sniffer.py -v -H -s -d -D -p -r -i -f "tcp port 80 or udp" -S capture.pcap -I 172.16.10.
-[22/06/2022 02:53:11 AM] DEBUG    Logging is configured.
-[22/06/2022 02:53:11 AM] DEBUG    PacketPrinter is created.
-[22/06/2022 02:53:11 AM] DEBUG    Start network interface detection...
-[22/06/2022 02:53:11 AM] INFO     Interface argument match with (172.16.10.55 ee:80:3d:0a:f9:2f WIFI)
-[22/06/2022 02:53:11 AM] DEBUG    Use network interface WIFI
-[22/06/2022 02:53:11 AM] DEBUG    Sniffer is created.
-[22/06/2022 02:53:11 AM] WARNING  Start the network sniffer on WIFI (IP: 172.16.10.55, MAC: ee:80:3d:0a:f9:2f).
-[22/06/2022 02:53:11 AM] DEBUG    Start the scapy.sendrecv.sniff function...
+[22/06/2022 02:53:11] DEBUG    (10) {__main__ - Sniffer.py:280} Logging is configured.
+[22/06/2022 02:53:11] DEBUG    (10) {__main__ - Sniffer.py:291} PacketPrinter is created.
+[22/06/2022 02:53:11] DEBUG    (10) {__main__ - Sniffer.py:165} Start network interface detection...
+[22/06/2022 02:53:11] DEBUG    (10) {__main__ - Sniffer.py:181} Use network interface WIFI
+[22/06/2022 02:53:11] DEBUG    (10) {__main__ - Sniffer.py:300} Sniffer is created.
+[22/06/2022 02:53:11] WARNING  (30) {__main__ - Sniffer.py:302} Start the network sniffer on WIFI (IP: 172.16.10.55, MAC: ee:80:3d:0a:f9:2f).
+[22/06/2022 02:53:11] DEBUG    (10) {__main__ - Sniffer.py:142} Start the scapy.sendrecv.sniff function...
 <packets ...>
-[22/06/2022 02:53:16 AM] INFO     Save the captured traffic.
-[22/06/2022 02:53:16 AM] CRITICAL Network traffic analysis is stopped.
+[22/06/2022 02:53:11] INFO     (20) {__main__ - Sniffer.py:192} Save the captured traffic.
+[22/06/2022 02:53:11] CRITICAL (50) {__main__ - Sniffer.py:312} Network traffic analysis is stopped.
 ~# python3 Sniffer.py -R capture.pcap
-[22/06/2022 02:53:11 AM] WARNING  Start the network sniffer on WIFI (IP: 172.16.10.55, MAC: ee:80:3d:0a:f9:2f).
+[22/06/2022 02:53:11] WARNING  (30) {__main__ - Sniffer.py:302} Start the network sniffer on WIFI (IP: 172.16.10.55, MAC: ee:80:3d:0a:f9:2f).
 <packets ...>
-[22/06/2022 02:53:11 AM] CRITICAL Network traffic analysis is stopped.
+[22/06/2022 02:53:11] CRITICAL (50) {__main__ - Sniffer.py:312} Network traffic analysis is stopped.
 """
 
-__version__ = "1.0.0"
+__version__ = "1.0.1"
 __author__ = "Maurice Lambert"
 __author_email__ = "mauricelambert434@gmail.com"
 __maintainer__ = "Maurice Lambert"
@@ -77,11 +76,38 @@ try:
 except ImportError:
     from PacketPrinter import PacketPrinter
 
+from logging import StreamHandler, Formatter, Logger
 from scapy.all import sniff, wrpcap, conf, IFACES
 from argparse import ArgumentParser, Namespace
 import scapy.interfaces
 import logging
 import sys
+
+global logger
+logger: Logger = None
+
+
+def get_custom_logger() -> Logger:
+
+    """
+    This function create a custom logger.
+    """
+
+    logger = logging.getLogger(__name__)  # default logger.level == 0
+
+    formatter = Formatter(
+        fmt=(
+            "%(asctime)s%(levelname)-9s(%(levelno)s) "
+            "{%(name)s - %(filename)s:%(lineno)d} %(message)s"
+        ),
+        datefmt="[%Y-%m-%d %H:%M:%S] ",
+    )
+    stream = StreamHandler(stream=sys.stdout)
+    stream.setFormatter(formatter)
+
+    logger.addHandler(stream)
+
+    return logger
 
 
 class Sniffer:
@@ -116,11 +142,13 @@ class Sniffer:
         This function starts the network sniffer.
         """
 
-        logging.debug("Start the scapy.sendrecv.sniff function...")
+        logger.debug("Start the scapy.sendrecv.sniff function...")
 
         if self.filetoread:
             self.packets = sniff(
-                offline=self.filetoread, prn=self.packet_printer.print, **self.kwargs
+                offline=self.filetoread,
+                prn=self.packet_printer.print,
+                **self.kwargs,
             )
         else:
             self.packets = sniff(
@@ -139,7 +167,7 @@ class Sniffer:
         """
 
         self.iface = conf.iface
-        logging.debug("Start network interface detection...")
+        logger.debug("Start network interface detection...")
 
         if self.string_iface is not None:
             for iface_ in IFACES.values():
@@ -148,14 +176,14 @@ class Sniffer:
                     or self.string_iface in iface_.mac
                     or self.string_iface in iface_.network_name
                 ):
-                    logging.info(
+                    logger.info(
                         "Interface argument match with "
                         f"({iface_.ip} {iface_.mac} {iface_.name})"
                     )
                     self.iface = iface_
                     break
 
-        logging.debug(f"Use network interface {self.iface.name}")
+        logger.debug(f"Use network interface {self.iface.name}")
         return self.iface
 
     def stop(self) -> None:
@@ -167,7 +195,7 @@ class Sniffer:
 
         self.run = False
         if self.savefile:
-            logging.info("Save the captured traffic.")
+            logger.info("Save the captured traffic.")
             wrpcap(self.savefile, self.packets)
 
 
@@ -247,15 +275,14 @@ def main() -> None:
     sniffer from the command line.
     """
 
+    global logger
+
     arguments = parse()
 
-    logging.basicConfig(
-        level=logging.DEBUG if arguments.verbose else logging.WARNING,
-        format="%(asctime)s%(levelname)-9s%(message)s",
-        datefmt="[%m/%d/%Y %I:%M:%S %p] ",
-    )
+    logger = get_custom_logger()
+    logger.level = logging.DEBUG if arguments.verbose else logging.WARNING
 
-    logging.debug("Logging is configured.")
+    logger.debug("Logging is configured.")
 
     packet_printer = PacketPrinter(
         arguments.no_hexa_printer,
@@ -266,7 +293,7 @@ def main() -> None:
         arguments.raw_printer,
         arguments.info_printer,
     )
-    logging.debug("PacketPrinter is created.")
+    logger.debug("PacketPrinter is created.")
 
     sniffer = Sniffer(
         packet_printer,
@@ -275,19 +302,19 @@ def main() -> None:
         filetoread=arguments.packet_file,
         iface=arguments.iface,
     )
-    logging.debug("Sniffer is created.")
+    logger.debug("Sniffer is created.")
 
-    logging.warning(
+    logger.warning(
         f"Start the network sniffer on {sniffer.iface.name}"
         f" (IP: {sniffer.iface.ip}, MAC: {sniffer.iface.mac})."
     )
     try:
         sniffer.start()
     except KeyboardInterrupt:
-        logging.warning("KeyboardInterrupt: stop the network sniffer...")
+        logger.warning("KeyboardInterrupt: stop the network sniffer...")
     finally:
         sniffer.stop()
-        logging.critical("Network traffic analysis is stopped.")
+        logger.critical("Network traffic analysis is stopped.")
 
 
 if __name__ == "__main__":
