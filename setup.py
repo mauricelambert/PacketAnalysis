@@ -16,7 +16,7 @@ setup(
     project_urls = {
         "Sniffer doc": "https://mauricelambert.github.io/info/python/security/PacketAnalysis/Sniffer.html",
         "PacketPrinter doc": "https://mauricelambert.github.io/info/python/security/PacketAnalysis/PacketPrinter.html",
-        "Executable": "https://mauricelambert.github.io/info/python/security/PacketAnalysis/PacketPrinter.pyz",
+        "Executable": "https://mauricelambert.github.io/info/python/security/PacketAnalysis/PacketAnalysis.pyz",
     },
     classifiers = [
         "Programming Language :: Python",
