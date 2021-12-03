@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
 Name: PacketAnalysis
-Version: 1.0.1
+Version: 1.0.2
 Summary: This package prints and sniffs the packets.
 Home-page: https://github.com/mauricelambert/PacketAnalysis
 Author: Maurice Lambert
@@ -10,7 +10,7 @@ Maintainer-email: mauricelambert434@gmail.com
 License: GPL-3.0 License
 Project-URL: Sniffer doc, https://mauricelambert.github.io/info/python/security/PacketAnalysis/Sniffer.html
 Project-URL: PacketPrinter doc, https://mauricelambert.github.io/info/python/security/PacketAnalysis/PacketPrinter.html
-Project-URL: Executable, https://mauricelambert.github.io/info/python/security/PacketPrinter.pyz
+Project-URL: Executable, https://mauricelambert.github.io/info/python/security/PacketAnalysis/PacketPrinter.pyz
 Keywords: traffic,network,packet,analysis
 Platform: Windows
 Platform: Linux

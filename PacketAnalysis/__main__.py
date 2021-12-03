@@ -23,7 +23,7 @@ This package prints and sniffs the packets.
 #    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 ###################
 
-__version__ = "1.0.1"
+__version__ = "1.0.2"
 __author__ = "Maurice Lambert"
 __author_email__ = "mauricelambert434@gmail.com"
 __maintainer__ = "Maurice Lambert"
