@@ -49,7 +49,7 @@ This file implements a network sniffer.
 [22/06/2022 02:53:11] CRITICAL (50) {__main__ - Sniffer.py:312} Network traffic analysis is stopped.
 """
 
-__version__ = "1.0.2"
+__version__ = "1.0.3"
 __author__ = "Maurice Lambert"
 __author_email__ = "mauricelambert434@gmail.com"
 __maintainer__ = "Maurice Lambert"
@@ -82,9 +82,6 @@ from argparse import ArgumentParser, Namespace
 import scapy.interfaces
 import logging
 import sys
-
-global logger
-logger: Logger = None
 
 
 def get_custom_logger() -> Logger:
@@ -275,12 +272,9 @@ def main() -> None:
     sniffer from the command line.
     """
 
-    global logger
-
     arguments = parse()
 
-    logger = get_custom_logger()
-    logger.level = logging.DEBUG if arguments.verbose else logging.WARNING
+    logger.setLevel(logging.DEBUG if arguments.verbose else logging.WARNING)
 
     logger.debug("Logging is configured.")
 
@@ -317,6 +311,9 @@ def main() -> None:
         logger.critical("Network traffic analysis is stopped.")
 
 
+logger: Logger = get_custom_logger()
+
 if __name__ == "__main__":
+    print(copyright)
     main()
     sys.exit(0)

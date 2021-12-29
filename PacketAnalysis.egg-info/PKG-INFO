@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
 Name: PacketAnalysis
-Version: 1.0.2
+Version: 1.0.3
 Summary: This package prints and sniffs the packets.
 Home-page: https://github.com/mauricelambert/PacketAnalysis
 Author: Maurice Lambert
