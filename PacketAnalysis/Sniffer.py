@@ -49,7 +49,7 @@ This file implements a network sniffer.
 [22/06/2022 02:53:11] CRITICAL (50) {__main__ - Sniffer.py:312} Network traffic analysis is stopped.
 """
 
-__version__ = "1.0.3"
+__version__ = "1.0.4"
 __author__ = "Maurice Lambert"
 __author_email__ = "mauricelambert434@gmail.com"
 __maintainer__ = "Maurice Lambert"
