@@ -23,7 +23,7 @@ This file implements a "packet printer" (a tool to print packet).
 #    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 ###################
 
-__version__ = "1.0.5"
+__version__ = "1.1.0"
 __author__ = "Maurice Lambert"
 __author_email__ = "mauricelambert434@gmail.com"
 __maintainer__ = "Maurice Lambert"
@@ -64,22 +64,23 @@ class PacketPrinter:
         raw_: bool = False,
         info: bool = False,
     ):
-        self.functions = []
+        functions = self.functions = []
+        packet_ = packet.Packet
 
         if hexa:
-            self.functions.append(hexdump)
+            functions.append(hexdump)
         if summary:
-            self.functions.append(self.print_summary)
+            functions.append(self.print_summary)
         if details1:
-            self.functions.append(packet.Packet.show)
+            functions.append(packet_.show)
         if details2:
-            self.functions.append(packet.Packet.show2)
+            functions.append(packet_.show2)
         if python:
-            self.functions.append(self.print_command)
+            functions.append(self.print_command)
         if raw_:
-            self.functions.append(self.print_raw)
+            functions.append(self.print_raw)
         if info:
-            self.functions.append(ls)
+            functions.append(ls)
 
     def print_command(self, packet: packet.Packet) -> None:
 

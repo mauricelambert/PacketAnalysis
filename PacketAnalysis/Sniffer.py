@@ -22,10 +22,11 @@
 """
 This file implements a network sniffer.
 
+>>> from scapy.all import conf
 >>> sniffer = Sniffer(PacketPrinter())
 >>> sniffer.start()
 >>> sniffer.stop()
->>> sniffer = Sniffer(PacketPrinter(), "tcp port 80 or udp", "capture.pcap", None, "172.16.10.")
+>>> sniffer = Sniffer(PacketPrinter(), "tcp port 80 or udp", "capture.pcap", None, conf.iface)
 >>> sniffer = Sniffer(PacketPrinter(), filetoread="capture.pcap")
 
 ~# python3 Sniffer.py
@@ -49,7 +50,7 @@ This file implements a network sniffer.
 [22/06/2022 02:53:11] CRITICAL (50) {__main__ - Sniffer.py:312} Network traffic analysis is stopped.
 """
 
-__version__ = "1.0.5"
+__version__ = "1.1.0"
 __author__ = "Maurice Lambert"
 __author_email__ = "mauricelambert434@gmail.com"
 __maintainer__ = "Maurice Lambert"
@@ -76,12 +77,85 @@ try:
 except ImportError:
     from PacketPrinter import PacketPrinter
 
-from logging import StreamHandler, Formatter, Logger
+from logging import StreamHandler, Formatter, Logger, getLogger, DEBUG, WARNING
 from scapy.all import sniff, wrpcap, conf, IFACES
 from argparse import ArgumentParser, Namespace
-import scapy.interfaces
-import logging
-import sys
+from scapy.interfaces import NetworkInterface
+from collections.abc import Callable
+from sys import exit, stdout
+from typing import List
+
+conf_iface: NetworkInterface = conf.iface
+
+
+class ScapyArguments(ArgumentParser):
+
+    """
+    This class implements ArgumentsParser with
+    interface argument and iface research.
+    """
+
+    interface_args: list = ["--interface", "-I"]
+    interface_kwargs: dict = {
+        "help": "Part of the IP, MAC or name of the interface",
+    }
+
+    def __init__(
+        self,
+        *args,
+        interface_args=interface_args,
+        interface_kwargs=interface_kwargs,
+        **kwargs,
+    ):
+        super().__init__(*args, **kwargs)
+        self.interface_args = interface_args
+        self.interface_kwargs = interface_kwargs
+        self.add_argument(*interface_args, **interface_kwargs)
+
+    def parse_args(
+        self, args: List[str] = None, namespace: Namespace = None
+    ) -> Namespace:
+
+        """
+        This function implements the iface
+        research from interface arguments.
+        """
+
+        namespace: Namespace = ArgumentParser.parse_args(self, args, namespace)
+
+        argument_name: str = max(self.interface_args, key=len)
+        for char in self.prefix_chars:
+            if char == argument_name[0]:
+                argument_name = argument_name.lstrip(char)
+                break
+
+        interface = getattr(namespace, argument_name, None)
+
+        if interface is not None:
+            interface = interface.casefold()
+
+            for temp_iface in IFACES.values():
+
+                ip = temp_iface.ip
+                mac = temp_iface.mac or ""
+                name = temp_iface.name or ""
+                network_name = temp_iface.network_name or ""
+
+                mac = mac.casefold()
+                name = name.casefold()
+                network_name = network_name.casefold()
+
+                if (
+                    (ip and interface in ip)
+                    or (mac and interface in mac)
+                    or (name and interface in name)
+                    or (network_name and interface in network_name)
+                ):
+                    namespace.iface = temp_iface
+                    return namespace
+
+        namespace.iface = conf_iface
+        return namespace
 
 
 def get_custom_logger() -> Logger:
@@ -90,7 +164,7 @@ def get_custom_logger() -> Logger:
     This function create a custom logger.
     """
 
-    logger = logging.getLogger(__name__)  # default logger.level == 0
+    logger = getLogger(__name__)  # default logger.level == 0
 
     formatter = Formatter(
         fmt=(
@@ -99,7 +173,7 @@ def get_custom_logger() -> Logger:
         ),
         datefmt="[%Y-%m-%d %H:%M:%S] ",
     )
-    stream = StreamHandler(stream=sys.stdout)
+    stream = StreamHandler(stream=stdout)
     stream.setFormatter(formatter)
 
     logger.addHandler(stream)
@@ -119,17 +193,16 @@ class Sniffer:
         filter_: str = None,
         savefile: str = None,
         filetoread: str = None,
-        iface: str = None,
+        iface: NetworkInterface = None,
         **kwargs,
     ):
         self.packet_printer = packet_printer
-        self.savefile = savefile
-        self.run = True
-        self.filter = filter_
         self.filetoread = filetoread
-        self.string_iface = iface
-        self.iface = self.get_iface()
+        self.savefile = savefile
+        self.filter = filter_
         self.kwargs = kwargs
+        self.iface = iface
+        self.run = True
 
         self.is_running = lambda packet: not self.run
 
@@ -139,11 +212,12 @@ class Sniffer:
         This function starts the network sniffer.
         """
 
-        logger.debug("Start the scapy.sendrecv.sniff function...")
+        logger_debug("Start the scapy.sendrecv.sniff function...")
+        filetoread = self.filetoread
 
-        if self.filetoread:
+        if filetoread:
             self.packets = sniff(
-                offline=self.filetoread,
+                offline=filetoread,
                 prn=self.packet_printer.print,
                 **self.kwargs,
             )
@@ -156,44 +230,18 @@ class Sniffer:
                 **self.kwargs,
             )
 
-    def get_iface(self) -> scapy.interfaces.NetworkInterface:
-
-        """
-        This function get a NetworkInterface from iface arguments
-        (a string of IP or MAC address or interface name).
-        """
-
-        self.iface = conf.iface
-        logger.debug("Start network interface detection...")
-
-        if self.string_iface is not None:
-            for iface_ in IFACES.values():
-                if (
-                    self.string_iface in iface_.ip
-                    or self.string_iface in iface_.mac
-                    or self.string_iface in iface_.network_name
-                ):
-                    logger.info(
-                        "Interface argument match with "
-                        f"({iface_.ip} {iface_.mac} {iface_.name})"
-                    )
-                    self.iface = iface_
-                    break
-
-        logger.debug(f"Use network interface {self.iface.name}")
-        return self.iface
-
     def stop(self) -> None:
 
         """
         This function stops the sniffer and writes
-        the pcap file to save the package.
+        the pcap file to save the packets.
         """
 
         self.run = False
-        if self.savefile:
-            logger.info("Save the captured traffic.")
-            wrpcap(self.savefile, self.packets)
+        savefile = self.savefile
+        if savefile:
+            logger_info("Save the captured traffic.")
+            wrpcap(savefile, self.packets)
 
 
 def parse() -> Namespace:
@@ -202,81 +250,75 @@ def parse() -> Namespace:
     This function parses command line arguments.
     """
 
-    parser = ArgumentParser()
-    parser.add_argument(
+    parser = ScapyArguments(
+        description="This program sniff the network connections."
+    )
+    add_argument = parser.add_argument
+    add_argument(
         "--verbose",
         "-v",
         help="Mode verbose (print debug message)",
         action="store_true",
     )
-    parser.add_argument(
+    add_argument(
         "--no-hexa-printer",
         "-H",
         action="store_false",
         help="Do not print the hexadecimal packet",
         default=True,
     )
-    parser.add_argument(
+    add_argument(
         "--summary-printer",
         "-s",
         action="store_true",
         help="Print the packet summary",
     )
-    parser.add_argument(
+    add_argument(
         "--details-printer",
         "-d",
         action="store_true",
         help="Print packet details",
     )
-    parser.add_argument(
+    add_argument(
         "--details2-printer",
         "-D",
         action="store_true",
         help="Print packet details type 2",
     )
-    parser.add_argument(
+    add_argument(
         "--python-printer",
         "-p",
         action="store_true",
         help="Print the scapy command to build the package.",
     )
-    parser.add_argument(
+    add_argument(
         "--raw-printer", "-r", action="store_true", help="Print raw packet"
     )
-    parser.add_argument(
+    add_argument(
         "--info-printer",
         "-i",
         action="store_true",
         help="Print packet information",
     )
-    parser.add_argument(
-        "--filter", "-f", help="Scapy filter to select packets"
-    )
-    parser.add_argument(
-        "--savefilename", "-S", help="Pcap file to save packets"
-    )
-    parser.add_argument(
-        "--packet-file", "-R", help="Pcap file to read for analysis"
-    )
-    parser.add_argument(
-        "--iface", "-I", help="Part of the IP, MAC or name of the interface"
-    )
+    add_argument("--filter", "-f", help="Scapy filter to select packets")
+    add_argument("--savefilename", "-S", help="Pcap file to save packets")
+    add_argument("--packet-file", "-R", help="Pcap file to read for analysis")
 
     return parser.parse_args()
 
 
-def main() -> None:
+def main() -> int:
 
     """
-    This function start the network
-    sniffer from the command line.
+    This function starts the network sniffer from the command line.
     """
 
     arguments = parse()
+    iface = arguments.iface
 
-    logger.setLevel(logging.DEBUG if arguments.verbose else logging.WARNING)
+    logger.setLevel(DEBUG if arguments.verbose else WARNING)
 
-    logger.debug("Logging is configured.")
+    logger_debug("Logging is configured.")
 
     packet_printer = PacketPrinter(
         arguments.no_hexa_printer,
@@ -287,33 +329,39 @@ def main() -> None:
         arguments.raw_printer,
         arguments.info_printer,
     )
-    logger.debug("PacketPrinter is created.")
+    logger_debug("PacketPrinter is created.")
 
     sniffer = Sniffer(
         packet_printer,
         filter_=arguments.filter,
         savefile=arguments.savefilename,
         filetoread=arguments.packet_file,
-        iface=arguments.iface,
+        iface=iface,
     )
-    logger.debug("Sniffer is created.")
+    logger_debug("Sniffer is created.")
 
-    logger.warning(
-        f"Start the network sniffer on {sniffer.iface.name}"
-        f" (IP: {sniffer.iface.ip}, MAC: {sniffer.iface.mac})."
+    logger_warning(
+        f"Start the network sniffer on {iface.name}"
+        f" (IP: {iface.ip}, MAC: {iface.mac})."
     )
     try:
         sniffer.start()
     except KeyboardInterrupt:
-        logger.warning("KeyboardInterrupt: stop the network sniffer...")
+        logger_warning("KeyboardInterrupt: stop the network sniffer...")
     finally:
         sniffer.stop()
-        logger.critical("Network traffic analysis is stopped.")
+        logger_critical("Network traffic analysis is stopped.")
+
+    return 0
 
 
 logger: Logger = get_custom_logger()
+logger_debug: Callable = logger.debug
+logger_info: Callable = logger.info
+logger_warning: Callable = logger.warning
+logger_error: Callable = logger.error
+logger_critical: Callable = logger.critical
 
 if __name__ == "__main__":
     print(copyright)
-    main()
-    sys.exit(0)
+    exit(main())

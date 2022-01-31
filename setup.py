@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name='PacketAnalysis',
-    version="1.0.5",
+    version="1.1.0",
     packages=['PacketAnalysis'],
     install_requires=['scapy'],
     author="Maurice Lambert",

@@ -23,7 +23,7 @@ This package prints and sniffs the packets.
 #    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 ###################
 
-__version__ = "1.0.5"
+__version__ = "1.1.0"
 __author__ = "Maurice Lambert"
 __author_email__ = "mauricelambert434@gmail.com"
 __maintainer__ = "Maurice Lambert"
@@ -47,9 +47,8 @@ try:
     from .Sniffer import main
 except ImportError:
     from Sniffer import main
-import sys
+
+from sys import exit
 
 print(copyright)
-
-main()
-sys.exit(0)
+exit(main())
